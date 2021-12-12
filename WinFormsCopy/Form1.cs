@@ -18,13 +18,22 @@ namespace WinFormsCopy
         public Form1()
         {
             InitializeComponent();
-            System.Threading.Timer timer = new System.Threading.Timer(ChangeColor, progressBar1, 1000, 1000);
+            System.Threading.Timer timer = new System.Threading.Timer(ChangeProgressBar, progressBar1, 1000, 1000);
         }
 
-        private void ChangeColor(object data)
+        private void ChangeProgressBar(object? data)
+        {
+            if (data == null) { return; }
+            ProgressBar? progressBar = data as ProgressBar;
+            if (progressBar == null) { return; }
+            progressBar.Value = random.Next(0, 101);
+            progressBar.SetState(random.Next(1, 4));
+        }
+
+        private void ChangeColor(object? data)
         {
             if(data == null) { return; }
-            Control control = data as Control;
+            Control? control = data as Control;
             if(control == null) { return; }
             control.ForeColor = Color.Red;
         }
