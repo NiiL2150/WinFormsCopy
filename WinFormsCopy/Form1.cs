@@ -13,12 +13,16 @@ namespace WinFormsCopy
 {
     public partial class Form1 : Form
     {
+        List<ProgressBar> progressBars = new List<ProgressBar>();
+        List<System.Threading.Timer> timers = new List<System.Threading.Timer>();
         Random random = new Random();
+        Size defSize = new Size(600, 23);
+        Point point = new Point(12, 41);
+        bool hasWon = false;
 
         public Form1()
         {
             InitializeComponent();
-            System.Threading.Timer timer = new System.Threading.Timer(ChangeProgressBar, progressBar1, 1000, 1000);
         }
 
         private void ChangeProgressBar(object? data)
@@ -30,43 +34,89 @@ namespace WinFormsCopy
             progressBar.SetState(random.Next(1, 4));
         }
 
-        private void ChangeColor(object? data)
+        private void AddRandomToProgressBar(object? data)
         {
-            if(data == null) { return; }
-            Control? control = data as Control;
-            if(control == null) { return; }
-            control.ForeColor = Color.Red;
-        }
-
-        private async void buttonCopy_Click(object sender, EventArgs e)
-        {
-            await CopyAsync();
-        }
-
-        private async Task CopyAsync()
-        {
-            byte[] buffer = new byte[1024 * 1024];
-            string From = textBox1.Text
-                , Where = textBox2.Text;
-
-            using (FileStream source = new FileStream(From, FileMode.Open, FileAccess.Read))
+            if (!hasWon)
             {
-                long fileLength = source.Length;
-                using (FileStream fs = new FileStream(Where, FileMode.CreateNew, FileAccess.Write))
+                if (data == null) { return; }
+                ProgressBar? progressBar = data as ProgressBar;
+                if (progressBar == null) { return; }
+                int tmp = random.Next(0, 10);
+                if(progressBar.Value + tmp > 100)
                 {
-                    long totalBytes = 0;
-                    int currentBlockSize = 0;
-
-                    while ((currentBlockSize = source.Read(buffer, 0, buffer.Length)) > 0)
-                    {
-                        totalBytes += currentBlockSize;
-                        double percentage = (double)totalBytes * 100.0 / fileLength;
-
-                        fs.Write(buffer, 0, currentBlockSize);
-
-                        progressBar1.Value = (int)percentage;
-                    }
+                    progressBar.Value = 100;
                 }
+                else
+                {
+                    progressBar.Value += tmp;
+                }
+
+                if (progressBar.Value >= 100)
+                {
+                    hasWon = true;
+                    MessageBox.Show($"{progressBar.Name} won!");
+                }
+            }
+            else
+            {
+                timers.Clear();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            foreach (var item in progressBars)
+            {
+                Controls.Remove(item);
+            }
+            timers.Clear();
+            progressBars.Clear();
+            point = new Point(12, 41);
+            for (int i = 0; i < Int32.Parse(textBox1.Text); i++)
+            {
+                Form1.ActiveForm.Size = new Size(640, 90 + Int32.Parse(textBox1.Text) * 19);
+                progressBars.Add(new ProgressBar());
+                progressBars.ElementAt(i).Size = defSize;
+                progressBars.ElementAt(i).Location = point;
+                point = new Point(point.X, point.Y + 19);
+                timers.Add(new System.Threading.Timer(ChangeProgressBar, progressBars.ElementAt(i), 1000, 1000));
+            }
+            foreach (var item in progressBars)
+            {
+                Controls.Add(item);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            hasWon = false;
+            foreach (var item in progressBars)
+            {
+                item.Value = 0;
+                Controls.Remove(item);
+                item.Dispose();
+            }
+            foreach (var item in timers)
+            {
+                item.Dispose();
+            }
+            timers.Clear();
+            progressBars.Clear();
+            point = new Point(12, 41);
+            for (int i = 0; i < Int32.Parse(textBox1.Text); i++)
+            {
+                Form1.ActiveForm.Size = new Size(640, 90 + Int32.Parse(textBox1.Text) * 19);
+                progressBars.Add(new ProgressBar());
+                progressBars.ElementAt(i).Size = defSize;
+                progressBars.ElementAt(i).Location = point;
+                progressBars.ElementAt(i).Name = $"{i + 1} horse";
+                progressBars.ElementAt(i).Value = 0;
+                point = new Point(point.X, point.Y + 19);
+                timers.Add(new System.Threading.Timer(AddRandomToProgressBar, progressBars.ElementAt(i), 100, 100));
+            }
+            foreach (var item in progressBars)
+            {
+                Controls.Add(item);
             }
         }
     }
