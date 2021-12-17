@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsCopy", "WinFormsCopy\WinFormsCopy.csproj", "{667B1926-2A3B-4BB7-B28F-09BD9F65612E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsCopy", "WinFormsCopy\WinFormsCopy.csproj", "{667B1926-2A3B-4BB7-B28F-09BD9F65612E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordFinding", "WordFinding\WordFinding.csproj", "{7A1F6B05-A8DF-4837-92A6-B972C42F3EBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{667B1926-2A3B-4BB7-B28F-09BD9F65612E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{667B1926-2A3B-4BB7-B28F-09BD9F65612E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{667B1926-2A3B-4BB7-B28F-09BD9F65612E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A1F6B05-A8DF-4837-92A6-B972C42F3EBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A1F6B05-A8DF-4837-92A6-B972C42F3EBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A1F6B05-A8DF-4837-92A6-B972C42F3EBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A1F6B05-A8DF-4837-92A6-B972C42F3EBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

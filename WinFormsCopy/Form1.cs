@@ -20,9 +20,36 @@ namespace WinFormsCopy
         Point point = new Point(12, 41);
         bool hasWon = false;
 
+        FibonacciNumberFinder fibonacci = new FibonacciNumberFinder();
+
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void SoftReset()
+        {
+            foreach (var item in timers)
+            {
+                item.Dispose();
+            }
+            timers.Clear();
+            timers = new List<System.Threading.Timer>();
+            hasWon = false;
+        }
+
+        private void HardReset()
+        {
+            SoftReset();
+            
+            foreach (var item in progressBars)
+            {
+                item.Value = 0;
+                Controls.Remove(item);
+                item.Dispose();
+            }
+            progressBars.Clear();
+            progressBars = new List<ProgressBar>();
         }
 
         private void ChangeProgressBar(object? data)
@@ -55,11 +82,8 @@ namespace WinFormsCopy
                 {
                     hasWon = true;
                     MessageBox.Show($"{progressBar.Name} won!");
+                    SoftReset();
                 }
-            }
-            else
-            {
-                timers.Clear();
             }
         }
 
@@ -89,19 +113,7 @@ namespace WinFormsCopy
 
         private void button2_Click(object sender, EventArgs e)
         {
-            hasWon = false;
-            foreach (var item in progressBars)
-            {
-                item.Value = 0;
-                Controls.Remove(item);
-                item.Dispose();
-            }
-            foreach (var item in timers)
-            {
-                item.Dispose();
-            }
-            timers.Clear();
-            progressBars.Clear();
+            HardReset();
             point = new Point(12, 41);
             for (int i = 0; i < Int32.Parse(textBox1.Text); i++)
             {
@@ -118,6 +130,12 @@ namespace WinFormsCopy
             {
                 Controls.Add(item);
             }
+        }
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            int count = await fibonacci.CountNumbers(0, Int32.Parse(textBox1.Text));
+            MessageBox.Show($"{count} numbers");
         }
     }
 }
